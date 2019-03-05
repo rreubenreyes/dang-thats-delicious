@@ -35,13 +35,15 @@ app.use(cookieParser());
 
 // Sessions allow us to store data on visitors from request to request
 // This keeps users logged in and allows us to send flash messages
-app.use(session({
-  secret: process.env.SECRET,
-  key: process.env.KEY,
-  resave: false,
-  saveUninitialized: false,
-  store: new MongoStore({ mongooseConnection: mongoose.connection })
-}));
+app.use(
+  session({
+    secret: process.env.SECRET,
+    key: process.env.KEY,
+    resave: false,
+    saveUninitialized: false,
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
+  }),
+);
 
 // // Passport JS is what we use to handle our logins
 app.use(passport.initialize());
@@ -68,6 +70,12 @@ app.use((req, res, next) => {
 // After allllll that above middleware, we finally handle our own routes!
 app.use('/', routes);
 
+app.get('/ping/:name', (req, res) => {
+  res.render('ping.pug', {
+    ping: 'pong',
+    params: req.params,
+  });
+});
 // If that above routes didnt work, we 404 them and forward to error handler
 app.use(errorHandlers.notFound);
 
