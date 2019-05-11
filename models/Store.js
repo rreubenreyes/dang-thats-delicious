@@ -5,14 +5,13 @@ const mongoose = require('mongoose');
 /* use native promises */
 mongoose.Promise = global.Promise;
 
-/* slugify baby */
-const slug = require('slugs');
+/* helper function to slugify any string */
+const slugify = require('slugs');
 
 const storeSchema = new mongoose.Schema({
   name: {
     type: String,
     trim: true,
-    // this will be passed as an error message
     required: 'Please enter a store name',
   },
   slug: String,
@@ -23,13 +22,13 @@ const storeSchema = new mongoose.Schema({
   tags: [String], // String array
 });
 
-// M O D E L M I D D L E W A R E
+// ""
 storeSchema.pre('save', function (next) {
-  if (!this.isModified('name')) {
+  if (!this.isModified('name')) { // Returns true if the (Mongo) document was modified.
     next();
     return;
   }
-  this.slug = slug(this.name);
+  this.slug = slugify(this.name);
   next();
 });
 

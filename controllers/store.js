@@ -1,6 +1,12 @@
 /* eslint-disable no-unused-vars */
 const Store = require('mongoose').model('Store');
 
+exports.ping = (req, res) => {
+  res.render('ping', {
+    pong: 'pong',
+  });
+};
+
 exports.homePage = (req, res) => {
   res.render('hello');
 };
